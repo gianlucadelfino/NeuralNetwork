@@ -19,7 +19,7 @@ How to Compile
 ===========
 - Clone repo in the desired directory
   - git clone https://github.com/gianlucadelfino/NeuralNetwork.git
-- Run:
+- cd in the src folder and run:
   - g++ -Wall -std=c++11 -I./headers main.cpp FileTrainingData.cpp Network.cpp Neuron.cpp XorTrainingData.cpp -o NeuralNetwork.o
 
 
