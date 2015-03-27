@@ -18,9 +18,9 @@ An example data set ("TrainingData.txt") representing a XOR operator is provided
 How to Compile
 ===========
 - Clone repo in the desired directory
-  git clone https://github.com/gianlucadelfino/NeuralNetwork.git
+  - git clone https://github.com/gianlucadelfino/NeuralNetwork.git
 - Run:
-  g++ -Wall -std=c++11 -I./headers main.cpp FileTrainingData.cpp Network.cpp Neuron.cpp XorTrainingData.cpp -o NeuralNetwork.o
+  - g++ -Wall -std=c++11 -I./headers main.cpp FileTrainingData.cpp Network.cpp Neuron.cpp XorTrainingData.cpp -o NeuralNetwork.o
 
 
 
