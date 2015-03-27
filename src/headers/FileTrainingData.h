@@ -12,7 +12,7 @@ public:
     FileTrainingData(const std::string & filename,
                      unsigned numOfInputs,
                      unsigned numOfTargets);
-    bool FileTrainingData::EndoOfTrainingData() const
+    bool EndoOfTrainingData() const
     {
         return !m_fileStream.good();
     }

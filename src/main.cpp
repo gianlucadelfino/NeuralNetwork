@@ -15,7 +15,7 @@ namespace
     void PrintVector(const std::vector<T> vec, const std::string & label)
     {
         std::cout << label << ":\t";
-        for (std::vector<T>::const_iterator cit = vec.begin();
+        for (typename std::vector<T>::const_iterator cit = vec.begin();
             cit != vec.end(); ++cit)
         {
             std::cout << *cit << "\t";

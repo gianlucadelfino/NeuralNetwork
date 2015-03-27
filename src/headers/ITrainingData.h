@@ -22,8 +22,8 @@ private:
     ITrainingData(const ITrainingData &);
     ITrainingData& operator==(const ITrainingData &);
 
-    unsigned m_numOfTargets;
     unsigned m_numOfInputs;
+    unsigned m_numOfTargets;
 };
 
 #endif

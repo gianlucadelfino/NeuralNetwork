@@ -24,7 +24,7 @@ namespace //anonymous
     }
 }
 
-Neuron::Neuron(unsigned id, unsigned numOfInputs)
+Neuron::Neuron(size_t id, unsigned numOfInputs)
     :m_id(id), m_lastOutput(0.0f), m_lastGradient(0.0f), m_isBias(false)
 {
     // Initialize all the weight randomly
