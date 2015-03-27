@@ -49,18 +49,17 @@ int main()
         net.FeedForward(inputs, outputValues);
 
 #ifdef DEBUG_LOG
-        if (epoch > 1900)
-        {
-            std::cout << "\nIteration: " << epoch << std::endl;
-            PrintVector<float>(inputs, "in");
-            PrintVector<float>(outputValues, "out");
-            std::cout << "Error: " << net.GetLastError() << std::endl;
-        }
+        std::cout << "\nIteration: " << epoch << std::endl;
+        PrintVector<float>(inputs, "in");
+        PrintVector<float>(outputValues, "out");
+        std::cout << "Current Sum of Squared Errors: " << net.GetLastError()
+                  << std::endl;
 #endif
         net.BackPropagate(targets);
         epoch++;
     }
 
+    std::cout << "Done. Press Any key to exit." << std::endl;
     std::cin.get();
 
     return 0;
