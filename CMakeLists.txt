@@ -32,12 +32,6 @@ else()
     message(FATAL "Build type not recognised")
 endif()
 
-# Set directories variable to look use in looking up the headers
-set(CORTEXICA_SHARED_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../SharedLibraries)
-set(THIRD_PARTY_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/../3rdPartyLibs)
-set(APPLICATIONS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/applications)
-set(CORTEXICA_SHARED_SCRIPTS_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../SharedScripts)
-
 # Put binaries under bin
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 message(STATUS "Executables will be placed in ${EXECUTABLE_OUTPUT_PATH}")
@@ -49,7 +43,7 @@ message(STATUS "Libraries go to ${LIBRARY_OUTPUT_PATH}")
 # Define macro used copy directories when installing
 macro(install_subdir folder_name)
     install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/${folder_name} DESTINATION
-            "$ENV{HOME}/.VP/${PROJECT_NAME}"
+            "$ENV{HOME}/.NeuralNetwork/${PROJECT_NAME}"
             DIRECTORY_PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE
                                   GROUP_WRITE GROUP_READ GROUP_EXECUTE
                                   WORLD_WRITE WORLD_READ WORLD_EXECUTE
@@ -61,7 +55,7 @@ endmacro()
 
 macro(install_project_directory)
     install(DIRECTORY DESTINATION
-            "$ENV{HOME}/.VP/${PROJECT_NAME}" DIRECTORY_PERMISSIONS
+            "$ENV{HOME}/.NeuralNetwork/${PROJECT_NAME}" DIRECTORY_PERMISSIONS
                         OWNER_WRITE OWNER_READ OWNER_EXECUTE
                         GROUP_WRITE GROUP_READ GROUP_EXECUTE
                         WORLD_WRITE WORLD_READ WORLD_EXECUTE)
