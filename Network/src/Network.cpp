@@ -6,14 +6,14 @@ using namespace std;
 
 #define DEBUG_LOG
 
-Network::Network(const vector<unsigned> & topology):m_lastError(0.0f)
+Network::Network(const vector<unsigned>& topology) : m_lastError(0.0f)
 {
     m_NeuronLayers.reserve(topology.size());
 
-    for(size_t i = 0; i < topology.size(); ++i)
+    for (size_t i = 0; i < topology.size(); ++i)
     {
         m_NeuronLayers.push_back(NeuronLayer());
-        NeuronLayer & curNeuronLayer = m_NeuronLayers.back();
+        NeuronLayer& curNeuronLayer = m_NeuronLayers.back();
         unsigned numOfNeurons = topology[i];
 
         if (i < topology.size() - 1)
@@ -24,7 +24,7 @@ Network::Network(const vector<unsigned> & topology):m_lastError(0.0f)
 
         curNeuronLayer.reserve(numOfNeurons);
 
-        unsigned prevLayerNumOfNeurons = (i > 0)? topology[i-1] + 1 : 0;
+        unsigned prevLayerNumOfNeurons = (i > 0) ? topology[i - 1] + 1 : 0;
 
         for (size_t j = 0; j < numOfNeurons; ++j)
         {
@@ -40,11 +40,11 @@ Network::Network(const vector<unsigned> & topology):m_lastError(0.0f)
     }
 }
 
-void Network::FeedForward(const vector<float> & inputValues,
-                          std::vector<float> & outputValues)
+void Network::FeedForward(const vector<float>& inputValues,
+                          std::vector<float>& outputValues)
 {
     // copy values input values into the first layer
-    NeuronLayer & firstLayer = m_NeuronLayers[0];
+    NeuronLayer& firstLayer = m_NeuronLayers[0];
     assert(inputValues.size() == firstLayer.size() - 1 &&
            "Network::FeedForward Error: "
            "the input size does not match the fist layer size!");
@@ -56,13 +56,14 @@ void Network::FeedForward(const vector<float> & inputValues,
 
     for (size_t i = 1; i < m_NeuronLayers.size(); ++i)
     {
-        NeuronLayer & curNeuronLayer = m_NeuronLayers[i];
-        const NeuronLayer & prevNeuronLayer = m_NeuronLayers[i-1];
+        NeuronLayer& curNeuronLayer = m_NeuronLayers[i];
+        const NeuronLayer& prevNeuronLayer = m_NeuronLayers[i - 1];
 
         // We need to iterate over all the neurons but the bias, which is
         // only in the hidden layers.
-        const size_t numOfNeurons = (i < m_NeuronLayers.size() - 1)?
-            curNeuronLayer.size() - 1 : curNeuronLayer.size();
+        const size_t numOfNeurons = (i < m_NeuronLayers.size() - 1) ?
+                                        curNeuronLayer.size() - 1 :
+                                        curNeuronLayer.size();
         for (size_t j = 0; j < numOfNeurons; ++j)
         {
             curNeuronLayer[j].UpdateNeuralOutput(prevNeuronLayer);
@@ -71,9 +72,10 @@ void Network::FeedForward(const vector<float> & inputValues,
 
     // Fill the outputValues
     outputValues.clear();
-    const NeuronLayer & outputLayer = m_NeuronLayers.back();
+    const NeuronLayer& outputLayer = m_NeuronLayers.back();
     for (NeuronLayer::const_iterator cit = outputLayer.begin();
-        cit != outputLayer.end(); ++cit)
+         cit != outputLayer.end();
+         ++cit)
     {
         outputValues.push_back(cit->GetLastOutput());
     }
@@ -82,13 +84,14 @@ void Network::FeedForward(const vector<float> & inputValues,
            "the output size does not match the fist layer size!");
 }
 
-void Network::BackPropagate(const std::vector<float> targets)
+void Network::BackPropagate(const std::vector<float>& targets)
 {
     // Calculate overall net error (sum of squared errors)
-    NeuronLayer & outputLayer = m_NeuronLayers.back();
+    NeuronLayer& outputLayer = m_NeuronLayers.back();
     float squaresSum = 0.0f;
     for (NeuronLayer::const_iterator cit = outputLayer.begin();
-        cit != outputLayer.end(); ++cit)
+         cit != outputLayer.end();
+         ++cit)
     {
         size_t idx = cit - outputLayer.begin();
         float delta = (targets[idx] - cit->GetLastOutput());
@@ -98,7 +101,8 @@ void Network::BackPropagate(const std::vector<float> targets)
 
     // Calculate output layer gradients
     for (NeuronLayer::iterator it = outputLayer.begin();
-        it != outputLayer.end(); ++it)
+         it != outputLayer.end();
+         ++it)
     {
         size_t idx = it - outputLayer.begin();
         it->UpdateLastGradientIfOutput(targets[idx]);
@@ -107,10 +111,10 @@ void Network::BackPropagate(const std::vector<float> targets)
     // Calculate hidden layer gradients
     for (size_t i = 1; i < m_NeuronLayers.size() - 1; ++i)
     {
-        NeuronLayer & curLayer = m_NeuronLayers[i];
-        NeuronLayer & nextLayer = m_NeuronLayers[i+1];
-        for (NeuronLayer::iterator it = curLayer.begin();
-            it != curLayer.end(); ++it)
+        NeuronLayer& curLayer = m_NeuronLayers[i];
+        NeuronLayer& nextLayer = m_NeuronLayers[i + 1];
+        for (NeuronLayer::iterator it = curLayer.begin(); it != curLayer.end();
+             ++it)
         {
             it->UpdateLastGradientIfHidden(nextLayer);
         }
@@ -120,13 +124,14 @@ void Network::BackPropagate(const std::vector<float> targets)
     // update connection weights
     for (size_t i = 1; i < m_NeuronLayers.size(); ++i)
     {
-        NeuronLayer & prevLayer = m_NeuronLayers[i-1];
-        NeuronLayer & curLayer = m_NeuronLayers[i];
+        NeuronLayer& prevLayer = m_NeuronLayers[i - 1];
+        NeuronLayer& curLayer = m_NeuronLayers[i];
 
         // We need to iterate over all the neurons but the bias, which is
         // only in the hidden layers.
-        const size_t numOfNeurons = (i < m_NeuronLayers.size() - 1)?
-            curLayer.size() - 1 : curLayer.size();
+        const size_t numOfNeurons = (i < m_NeuronLayers.size() - 1) ?
+                                        curLayer.size() - 1 :
+                                        curLayer.size();
         for (size_t j = 0; j < numOfNeurons; ++j)
         {
             // Loop through all Neurons but the bias:

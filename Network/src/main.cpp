@@ -11,17 +11,18 @@
 
 namespace
 {
-    template <typename T>
-    void PrintVector(const std::vector<T> vec, const std::string & label)
+template <typename T>
+void printVector(const std::vector<T> vec, const std::string& label)
+{
+    std::cout << label << ":\t";
+    for (typename std::vector<T>::const_iterator cit = vec.begin();
+         cit != vec.end();
+         ++cit)
     {
-        std::cout << label << ":\t";
-        for (typename std::vector<T>::const_iterator cit = vec.begin();
-            cit != vec.end(); ++cit)
-        {
-            std::cout << *cit << "\t";
-        }
-        std::cout << std::endl;
+        std::cout << *cit << "\t";
     }
+    std::cout << std::endl;
+}
 }
 
 int main()
@@ -44,14 +45,14 @@ int main()
     unsigned epoch = 0;
     while (!testData.EndoOfTrainingData())
     {
-        testData.GetNextInputAndTargetValues(inputs, targets);
+        testData.GetNextInputAndTargetValues(&inputs, &targets);
 
         net.FeedForward(inputs, outputValues);
 
 #ifdef DEBUG_LOG
         std::cout << "\nIteration: " << epoch << std::endl;
-        PrintVector<float>(inputs, "in");
-        PrintVector<float>(outputValues, "out");
+        printVector(inputs, "in");
+        printVector(outputValues, "out");
         std::cout << "Current Sum of Squared Errors: " << net.GetLastError()
                   << std::endl;
 #endif

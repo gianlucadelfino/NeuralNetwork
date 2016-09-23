@@ -10,22 +10,22 @@ using namespace std;
 
 //#define DEBUG_LOG
 
-namespace //anonymous
+namespace // anonymous
 {
-    float ActivationFunction(float x)
-    {
-        return tanh(x);
-    }
+float ActivationFunction(float x)
+{
+    return tanh(x);
+}
 
-    float ActivationFunctionDerivative(float x)
-    {
-        float t = tanh(x);
-        return 1 - t*t;
-    }
+float ActivationFunctionDerivative(float x)
+{
+    float t = tanh(x);
+    return 1 - t * t;
+}
 }
 
 Neuron::Neuron(size_t id, unsigned numOfInputs)
-    :m_id(id), m_lastOutput(0.0f), m_lastGradient(0.0f), m_isBias(false)
+    : m_id(id), m_lastOutput(0.0f), m_lastGradient(0.0f), m_isBias(false)
 {
     // Initialize all the weight randomly
     std::default_random_engine generator(4);
@@ -44,14 +44,13 @@ Neuron::Neuron(size_t id, unsigned numOfInputs)
 #endif
 }
 
-void Neuron::UpdateNeuralOutput(const vector<Neuron> & upStreamLayer)
+void Neuron::UpdateNeuralOutput(const vector<Neuron>& upStreamLayer)
 {
-    assert(!m_isBias &&
-        "Neuron Error: Operation not supported on bias Neuron");
+    assert(!m_isBias && "Neuron Error: Operation not supported on bias Neuron");
     assert(upStreamLayer.size() == m_inputWeight.size() &&
-        "Neuron::UpdateNeuralOutput Error: "
-        "the size of the upStream layer does not match the size of the"
-        "weight vector");
+           "Neuron::UpdateNeuralOutput Error: "
+           "the size of the upStream layer does not match the size of the"
+           "weight vector");
     float sum = 0.0f;
     for (size_t i = 0; i < upStreamLayer.size(); ++i)
     {
@@ -63,45 +62,44 @@ void Neuron::UpdateNeuralOutput(const vector<Neuron> & upStreamLayer)
 
 void Neuron::UpdateLastGradientIfOutput(float target)
 {
-    assert(!m_isBias &&
-        "Neuron::UpdateLastGradientIfOutput Error: "
-        "not supported on bias Neuron");
+    assert(!m_isBias && "Neuron::UpdateLastGradientIfOutput Error: "
+                        "not supported on bias Neuron");
     float delta = (target - m_lastOutput);
     m_lastGradient = delta * ActivationFunctionDerivative(m_lastOutput);
 }
 
 void Neuron::UpdateLastGradientIfHidden(
-    const std::vector<Neuron> & downStreamLayer)
+    const std::vector<Neuron>& downStreamLayer)
 {
     float delta = 0.0f;
     for (std::vector<Neuron>::const_iterator cit = downStreamLayer.begin();
-        cit != downStreamLayer.end(); ++cit)
+         cit != downStreamLayer.end();
+         ++cit)
     {
         delta += cit->GetLastGradient() * cit->GetInputWeight(m_id);
     }
     m_lastGradient = ActivationFunctionDerivative(m_lastOutput) * delta;
 }
 
-void Neuron::UpdateInputWeights(
-    const std::vector<Neuron> & upStreamLayer)
+void Neuron::UpdateInputWeights(const std::vector<Neuron>& upStreamLayer)
 {
-    assert(!m_isBias &&
-        "Neuron::UpdateInputWeights Error: "
-        "not supported on bias Neuron");
+    assert(!m_isBias && "Neuron::UpdateInputWeights Error: "
+                        "not supported on bias Neuron");
 
     for (vector<float>::iterator inWeightIter = m_inputWeight.begin();
-        inWeightIter != m_inputWeight.end(); ++inWeightIter)
+         inWeightIter != m_inputWeight.end();
+         ++inWeightIter)
     {
         size_t idx = inWeightIter - m_inputWeight.begin();
 
         float weightDelta =
-            eta * upStreamLayer[idx].GetLastOutput() * m_lastGradient
-            + alpha * m_lastInputWeightDelta[idx];
+            eta * upStreamLayer[idx].GetLastOutput() * m_lastGradient +
+            alpha * m_lastInputWeightDelta[idx];
 
         m_lastInputWeightDelta[idx] = weightDelta;
 #ifdef DEBUG_LOG
-        std::cout << "weightDelta m_id idx " << m_id << ", " << idx
-            << " = " << weightDelta << std::endl;
+        std::cout << "weightDelta m_id idx " << m_id << ", " << idx << " = "
+                  << weightDelta << std::endl;
 #endif
         *inWeightIter += weightDelta;
     }

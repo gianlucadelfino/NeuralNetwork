@@ -19,10 +19,9 @@ How to Compile
 ===========
 - Clone repo in the desired directory
   - git clone https://github.com/gianlucadelfino/NeuralNetwork.git
-- cd in the src folder and run:
-  - g++ -Wall -std=c++11 -I./headers main.cpp FileTrainingData.cpp Network.cpp Neuron.cpp XorTrainingData.cpp -o NeuralNetwork.o
-
-
+- Create a build directory anywhere
+- ccmake <path to source>. Then chose between Release or Debug build type.
+- call "make". The executable will be in the "bin" sub-directory
 
 License
 =======

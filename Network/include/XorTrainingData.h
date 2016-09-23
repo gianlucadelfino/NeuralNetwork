@@ -1,5 +1,4 @@
-#ifndef XORTRAININGDATA_H
-#define XORTRAININGDATA_H
+#pragma once
 
 #include <vector>
 
@@ -13,12 +12,10 @@ public:
                     unsigned numOfTargets);
 
     virtual void GetNextInputAndTargetValues(
-        std::vector<float> & inputs,
-        std::vector<float> & targets);
+        std::vector<float>* inputs, std::vector<float>* targets) override;
 
     virtual bool EndoOfTrainingData() const;
+
 private:
     unsigned m_datasetSize;
 };
-
-#endif

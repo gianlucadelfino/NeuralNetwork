@@ -1,0 +1,7 @@
+# Directories
+*build*/
+
+# Extensions
+*.log
+*.user
+*.autosave
